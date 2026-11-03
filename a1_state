@@ -1,0 +1,16 @@
+class State:
+    size = 2
+    def __init__(self, grid):
+        if grid is None:
+            self.grid = [[' ' for _ in range(State.size)] for _ in range(State.size)]
+        else:
+            assert(len(grid) == State.size)
+            assert(len(grid[0]) == State.size)
+            self.grid = [row[:] for row in grid]
+
+    def __str__(self):
+        out = ''
+        for row in self.grid:
+            out += '|'.join(row) + '\n'
+            out += '-' * 3 + '\n'
+        return out
