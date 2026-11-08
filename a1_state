@@ -1,16 +1,29 @@
+#(Groupnumberidk?, 100464097, everyone elses id)
+
 class State:
-    size = 2
+    size = 5
     def __init__(self, grid):
         if grid is None:
-            self.grid = [[' ' for _ in range(State.size)] for _ in range(State.size)]
+            self.grid = [[0 for _ in range(State.size)] for _ in range(State.size)]
         else:
             assert(len(grid) == State.size)
-            assert(len(grid[0]) == State.size)
+            assert all(len(row) == State.size for row in grid)
             self.grid = [row[:] for row in grid]
 
     def __str__(self):
         out = ''
         for row in self.grid:
-            out += '|'.join(row) + '\n'
-            out += '-' * 3 + '\n'
+            out += ' '.join(str(cell) for cell in row) + '\n'
         return out
+
+    def move(self, letter):
+        position = ord(letter) - ord('A')
+
+        row = position // State.size
+        col = position % State.size
+
+        if self.grid[row][col] == 1:
+            self.grid[row][col] = 0
+            return True
+
+        return False
