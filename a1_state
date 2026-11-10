@@ -27,3 +27,23 @@ class State:
             return True
 
         return False
+    
+    def successors(self):
+        for r in range(State.size):
+            for c in range(State.size):
+                if self.grid[r][c] > 0:
+                    new_state  = State(self.grid)
+                    new_state.grid[r][c] = self.grid[r][c] - 1
+                    yield new_state            
+
+    def Test():
+        s = State([[1,0,0,0,0], [0,1,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,1]])
+        print(s.__str__())
+        succs = list(s.successors())
+        print(len(succs))
+        print(s)
+        for succ in succs:
+            print(succ)
+
+
+State.Test()
