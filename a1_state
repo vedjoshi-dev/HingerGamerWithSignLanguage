@@ -70,18 +70,48 @@ class State:
 
         
         return numRegions
+
+
+    def tester():
+        empty = [[0] * 5 for _ in range(5)]
+        sa = State([[1, 1, 0, 0, 1],
+                    [1, 1, 0, 0, 0],
+                    [0, 0, 1, 1, 1],
+                    [0, 0, 0, 1, 1],
+                    [0, 0, 0, 0, 1]])
+        
+        print("State sa:")
+        print(sa)
+
+        s = State(sa.grid)
+        print("move ('Y'):", s.move('Y'))
+        print (s)
+
+        print("move ('Y') again:", s.move('Y'))
+    
+        print ("Unchanged:", sa.grid[4][4] == 1)
+
+        succs = list(sa.successors())
+        print("Number of successors:", len(succs))
+        print ("First Successor:")
+        print(succs[0])
+
+        print ("NumRegion = ", s.numRegions())
+
+if __name__ == "__main__":
+    State.tester()
  
 
 
-    def Test():
-        s = State([[1,1,1,1,1], [0,0,1,0,0], [1,1,1,1,0], [0,0,1,0,1], [1,0,1,0,0]])
-        print(s.__str__())
-        # succs = list(s.successors())
-        # print(len(succs))
-        # print(s)
-        # for succ in succs:
-        #     print(succ)
-        print (s.numRegions())
+#     def Test():
+#         s = State([[1,1,1,1,1], [0,0,1,0,0], [1,1,1,1,0], [0,0,1,0,1], [1,0,1,0,0]])
+#         print(s.__str__())
+#         # succs = list(s.successors())
+#         # print(len(succs))
+#         # print(s)
+#         # for succ in succs:
+#         #     print(succ)
+#         print (s.numRegions())
 
 
-State.Test()
+# State.Test()
