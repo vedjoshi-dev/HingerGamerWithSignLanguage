@@ -34,16 +34,54 @@ class State:
                 if self.grid[r][c] > 0:
                     new_state  = State(self.grid)
                     new_state.grid[r][c] = self.grid[r][c] - 1
-                    yield new_state            
+                    yield new_state      
+
+
+    def adjacentOnes(self,r,c,markedOnes):
+        adjacency = [
+            (-1, -1),  # up-left
+            (-1, 0),   # up
+            (-1, 1),   # up-right
+            (0, -1),   # left
+            (0, 1),    # right
+            (1, -1),   # down-left
+            (1, 0),    # down
+            (1, 1)     # down-right
+        ]
+        
+
+        for ar, ac in adjacency:
+            if 0 <= r + ar < State.size and 0 <= c + ac < State.size:
+                if self.grid[r+ar][c+ac] == 1 and not (r+ar,c+ac) in markedOnes:
+                    markedOnes.append((r+ar,c+ac))
+                    self.adjacentOnes(r+ar,c+ac,markedOnes)
+
+
+    def numRegions(self):
+        numRegions = 0
+        markedOnes = []
+
+        for r in range(State.size):
+            for c in range(State.size):
+                        if self.grid[r][c] == 1 and (r,c) not in markedOnes:
+                            markedOnes.append ((r,c))
+                            numRegions = numRegions + 1
+                            self.adjacentOnes(r,c,markedOnes)
+
+        
+        return numRegions
+ 
+
 
     def Test():
-        s = State([[1,0,0,0,0], [0,1,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,1]])
+        s = State([[1,1,1,1,1], [0,0,1,0,0], [1,1,1,1,0], [0,0,1,0,1], [1,0,1,0,0]])
         print(s.__str__())
-        succs = list(s.successors())
-        print(len(succs))
-        print(s)
-        for succ in succs:
-            print(succ)
+        # succs = list(s.successors())
+        # print(len(succs))
+        # print(s)
+        # for succ in succs:
+        #     print(succ)
+        print (s.numRegions())
 
 
 State.Test()
