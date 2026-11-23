@@ -3,19 +3,19 @@ from a1_state import State
 class Agent:
     def __init__(self, name="B14"):
         self.name = name
-        self.mode = ['minimax', 'alphabeta']
+        self.modes = ['minimax', 'alphabeta']
         self.depth = 3
     
     def __str__(self):
-        return f"{self.name}, your mode is: {self.mode}"
+        return f"{self.name}, your mode is: {self.modes}"
 
-    def next_move(self, state, mode= 'alphabeta'):
-        if mode not in self.mode:
-            raise ValueError("Unknown mode:" + mode)
+    def next_move(self, state, modes = 'alphabeta'):
+        if modes not in self.modes:
+            raise ValueError("Unknown mode:" + modes)
         best_letter, best_value = None, float('-inf')
         for letter, r, c in self.moves(state):
             gain, child= self.play(state, letter, r, c)
-            value = gain + self.search (child, self.depth - 1, float('-inf'), float('inf'), False, mode == 'alphabeta')
+            value = gain + self.search (child, self.depth - 1, float('-inf'), float('inf'), False, modes == 'alphabeta')
             if value > best_value:
                 best_letter, best_value = letter , value
         return best_letter
@@ -28,11 +28,15 @@ class Agent:
         for letter, r,c in moves:
             gain, child = self.play(state, letter, r, c)
             if maximising:
-                best = max(best, gain + self.search(child, depth - 1, alpha, beta, False,prune))
-                alpha = max(alpha,best)
-            else: 
-                best = min(best, -gain + self.search(child, depth - 1, alpha, beta, True,prune))
-                beta = max(beta,best)
+                value = gain + self.search(child, depth - 1, alpha, beta, False, prune)
+                best = max(best, value)
+                alpha = max(alpha, best)
+
+            else:
+                value = -gain + self.search(child, depth - 1, alpha, beta, True, prune)
+                best = min(best, value)
+                beta = min(beta, best)
+
             if prune and alpha >= beta:
                 break
             return best
@@ -66,9 +70,9 @@ def tester():
     print("State sa:")
     print(sa)
 
-    for mode in agent.mode:
-        move = agent.next_move(sa,mode)
-        print(mode, "chose:", move)
+    for modes in agent.modes:
+        move = agent.next_move(sa,modes)
+        print(modes, "chose:", move)
         assert State(sa.grid).move(move) is True
     line = State([[1, 1, 1, 0,0]] + [[0] * 5 for _ in range(4)])
     print("Hinger test:", agent.next_move(line))
