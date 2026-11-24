@@ -39,7 +39,8 @@ class Agent:
 
             if prune and alpha >= beta:
                 break
-            return best
+            
+        return best
 
     def moves(self, state):
         return [(chr(ord('A') + r * State.size + c), r, c)
@@ -74,9 +75,28 @@ def tester():
         move = agent.next_move(sa,modes)
         print(modes, "chose:", move)
         assert State(sa.grid).move(move) is True
-    line = State([[1, 1, 1, 0,0]] + [[0] * 5 for _ in range(4)])
-    print("Hinger test:", agent.next_move(line))
     print("Empty board:", agent.next_move(State(None)))
+
+    line = State([
+        [1, 1, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+    ])
+    
+    print("Hinger test:", agent.next_move(line))
+    gain, child = agent.play(line, 'B', 0, 1)
+
+    print("Gain:", gain)
+    print("Original regions:", line.numRegions())
+    print("New regions:", child.numRegions())
+
+    gain, child = agent.play(line, 'A', 0, 0)
+
+    print("Gain when removing A:", gain)
+    print("Original regions:", line.numRegions())
+    print("New regions:", child.numRegions())
 
 if __name__ == "__main__":
     tester()
